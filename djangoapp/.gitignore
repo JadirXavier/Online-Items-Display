@@ -1,0 +1,44 @@
+# .gitignore
+
+# Ambiente virtual (venv)
+venv/
+env/
+ENV/
+.venv/
+
+# Arquivos de sistema
+*.DS_Store
+*.log
+*.sqlite3
+
+# Arquivos Python compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Configurações do Editor
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Diretório de mídia (imagens carregadas)
+media/
+
+# Diretório de estática (arquivos coletados)
+staticfiles/
+static/
+
+# Arquivos de pacotes e logs
+*.env
+*.egg-info/
+.eggs/
+*.coverage
+.coverage.*
+.cache
+*.spec
+
+# Arquivos de log do Django
+*.log
+
+# Arquivos de banco de dados local
+db.sqlite3
