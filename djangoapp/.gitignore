@@ -24,9 +24,7 @@ __pycache__/
 # Diretório de mídia (imagens carregadas)
 media/
 
-# Diretório de estática (arquivos coletados)
-staticfiles/
-static/
+
 
 # Arquivos de pacotes e logs
 *.env
