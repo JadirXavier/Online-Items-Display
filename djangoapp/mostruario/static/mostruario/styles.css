@@ -1,0 +1,35 @@
+.navbar{
+    background-color: #E2BFD9 !important;
+}
+
+body {
+    background-color: #F7EFE5 !important;
+}
+
+.card {
+    background-color: white !important;
+    
+}
+
+
+p, h1, h2, h3, h4, h5, a {
+    color:  black !important;
+}
+
+.image-container {
+    max-height: 500px; 
+    overflow: hidden; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container img {
+    height: 100%; 
+    width: auto; 
+    object-fit: contain;
+}
+
+#id_photo, #id_description, #id_name, #id_price {
+    width: 100%;
+}

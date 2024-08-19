@@ -20,7 +20,7 @@ from . import views
 app_name = 'mostruario'
 
 urlpatterns = [
-    path('', views.item_list, name='item_list'),
-    path('add/', views.item_create, name='item_create'),
-    path('edit/<int:pk>/', views.item_edit, name='item_edit'),
+    path('', views.index, name='index'), 
+    path('delete/<int:item_id>/', views.delete_item, name='delete_item'),
+    path('update/<int:item_id>/', views.update_item, name='update_item'),
 ]
