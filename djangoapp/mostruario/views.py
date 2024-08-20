@@ -9,7 +9,7 @@ from .forms import ItemForm
 # Create your views here.
 
 def index(request):
-    if request.method == "POST":
+    if request.method == "POST" and request.user.is_authenticated:
         form = ItemForm(request.POST, request.FILES)
         if form.is_valid():
             item = form.save(commit=False)  
@@ -28,6 +28,7 @@ def delete_item(request, item_id):
     item.delete()
     return HttpResponseRedirect(reverse('mostruario:index'))
 
+@login_required
 def update_item(request, item_id):
     item = get_object_or_404(Item, id=item_id, created_by=request.user)
 

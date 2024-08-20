@@ -16,53 +16,57 @@
     {% include './navbar.html' %}
     <h1>Roupas</h1>
     <div class="container mt-5">
-        <div class="row justify-content-evenly">
+        <div class="row" data-desktop-columns="4" data-format="grid">
             {% for item in items %}
-            <div class="col-md-4 m-2">
+            <div class="col-6 col-md-4 col-lg-3 item">
                 <div class="card">
                     {% if item.photo %}
-                    <img src="{{ item.photo.url }}" class="card-img-top" alt="{{ item.name }}">
+                        <div class="image-container p-2">
+                            <img src="{{ item.photo.url }}" class="card-img-top" alt="{{ item.name }}">
+                        </div>
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ item.name }}</h5>
-                        <p class="card-text">{{ item.description }}</p>
                         <p class="card-text"><strong>Price:</strong> ${{ item.price }}</p>
-                        <button class="btn btn-warning" onclick="toggleEditForm('{{ item.id }}')">Editar</button>
-                        <a href="{% url 'mostruario:delete_item' item.id %}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar este item?');">Deletar</a>
-                        <div class="edit-form d-none mt-3">
-                            <form method="post" enctype="multipart/form-data" action="{% url 'mostruario:update_item' item.id %}">
-                                {% csrf_token %}
-                                {{ form.as_p }}
-                                <button type="submit" class="btn btn-primary">Salvar</button>
-                                <button type="button" class="btn btn-secondary" onclick="toggleEditForm('{{ item.id }}')">Cancelar</button>
-                            </form>
-                        </div>
+                        {% if user.is_authenticated %}
+                            <button class="btn btn-warning" onclick="toggleEditForm('{{ item.id }}')">Editar</button>
+                            <a href="{% url 'mostruario:delete_item' item.id %}" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar este item?');">Deletar</a>
+                            <div class="edit-form d-none mt-3">
+                                <form method="post" enctype="multipart/form-data" action="{% url 'mostruario:update_item' item.id %}">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                    <button type="button" class="btn btn-secondary" onclick="toggleEditForm('{{ item.id }}')">Cancelar</button>
+                                </form>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             {% endfor %}
-            
-            <!-- Button to open form -->
-            <div class="col-md-4 m-2">
-                <div class="card text-center h-100" id="add-item-btn">
-                    <div class="card-body d-flex align-items-center justify-content-center">
-                        <h1>+</h1>
+            {% if user.is_authenticated %}
+                <!-- Button to open form -->
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card text-center h-100" id="add-item-btn">
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <h1>+</h1>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Hidden form -->
-            <div class="col-md-4 d-none" id="add-item-form">
-                <div class="card">
-                    <div class="card-body">
-                        <form method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit" class="btn btn-primary">Add Item</button>
-                        </form>
+                <!-- Hidden form -->
+                <div class="col-6 col-md-4 col-lg-3 d-none" id="add-item-form">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button type="submit" class="btn btn-primary">Add Item</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
     <script>
