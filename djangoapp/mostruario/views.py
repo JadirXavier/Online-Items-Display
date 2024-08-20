@@ -19,8 +19,16 @@ def index(request):
     else:
         form = ItemForm()
     
-    items = Item.objects.all()
-    return render(request, 'mostruario/index.html', {'form': form, 'items': items})
+    category_filter= request.GET.get('category', 'all')
+    if category_filter == 'all':
+        items = Item.objects.all()
+        
+    else:
+        items = Item.objects.filter(category=category_filter)
+    
+    categories = Item.CATEGORIES
+    print(categories)
+    return render(request, 'mostruario/index.html', {'form': form, 'items': items, 'categories': categories})
 
 @login_required
 def delete_item(request, item_id):
@@ -40,4 +48,4 @@ def update_item(request, item_id):
     else:
         form = ItemForm(instance=item)
 
-    return render(request, 'mostruario/index.html', {'form': form, 'items': Item.objects.all()})
+    return render(request, 'mostruario/index.html', {'form': form, 'items': Item.objects.all(), 'categories': Item.CATEGORIES})

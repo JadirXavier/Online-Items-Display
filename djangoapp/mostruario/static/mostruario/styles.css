@@ -36,3 +36,7 @@ p, h1, h2, h3, h4, h5, a {
 #id_photo, #id_description, #id_name, #id_price {
     width: 100%;
 }
+
+.filter-button {
+    border-radius: 20px;
+}
