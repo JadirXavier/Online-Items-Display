@@ -34,7 +34,7 @@
         </div>
         <div class="row" data-desktop-columns="4" data-format="grid">
             {% for item in items %}
-            <div class="col-6 col-md-4 col-lg-3 item" data-category="{{ item.category }}">
+            <div class="col-6 col-md-4 col-lg-3 item" data-category="{{ item.category }}" data-id="{{ item.id }}">
                 <div class="card">
                     {% if item.photo %}
                     <div class="image-container p-2">
@@ -61,9 +61,8 @@
             </div>
             {% endfor %}
             {% if user.is_authenticated %}
-
                 <!-- Botão para abrir a form -->
-                <div class="col-6 col-md-4 col-lg-3">
+                <div class="col-6 col-md-4 col-lg-3 item">
                     <div class="card text-center h-100" id="add-item-btn">
                         <div class="card-body d-flex align-items-center justify-content-center">
                             <h1>+</h1>
@@ -93,9 +92,13 @@
         });
 
         function toggleEditForm(itemId) {
-            console.log(itemId)
-            var form = document.querySelector('[data-category="' + itemId + '"] .edit-form');
-            var button = document.querySelector('[data-category="' + itemId + '"] .btn-warning');
+            console.log(itemId);
+            
+            let itemElement = document.querySelector('[data-id="' + itemId + '"]');
+            
+            let form = itemElement.querySelector('.edit-form');
+            let button = itemElement.querySelector('.btn-warning');
+            
             if (form.classList.contains('d-none')) {
                 form.classList.remove('d-none');
                 button.textContent = 'Cancelar';
@@ -107,7 +110,7 @@
 
         function filterItems(category) {
             console.log(category)
-            var items = document.querySelectorAll('.item');
+            let items = document.querySelectorAll('.item');
             items.forEach(function(item) {
                 if (category == 'all' || item.getAttribute('data-category') == category) {
                     item.style.display = 'block';
