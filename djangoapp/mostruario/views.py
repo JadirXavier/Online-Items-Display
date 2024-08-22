@@ -13,7 +13,10 @@ def index(request):
         form = ItemForm(request.POST, request.FILES)
         if form.is_valid():
             item = form.save(commit=False)  
-            item.created_by = request.user  
+            item.created_by = request.user
+            if item.photo == None:
+                item.photo = '../static/mostruario/imgs/no-image-icon.png'
+
             item.save()  
             return redirect('mostruario:index')
     else:
