@@ -16,22 +16,36 @@ def index(request):
             item.created_by = request.user
             if item.photo == None:
                 item.photo = '../static/mostruario/imgs/no-image-icon.png'
-
+                
             item.save()  
             return redirect('mostruario:index')
     else:
         form = ItemForm()
-    
-    category_filter= request.GET.get('category', 'all')
+
+    category_filter = request.GET.get('category', 'all')
     if category_filter == 'all':
-        items = Item.objects.all()
-        
+        items_list = Item.objects.all()
     else:
-        items = Item.objects.filter(category=category_filter)
+        items_list = Item.objects.filter(category=category_filter)
+    
+    paginator = Paginator(items_list, 12)  # 12 itens por página
+    page = request.GET.get('page')
+    
+    try:
+        items = paginator.page(page)
+    except PageNotAnInteger:
+        items = paginator.page(1)
+    except EmptyPage:
+        items = paginator.page(paginator.num_pages)
     
     categories = Item.CATEGORIES
-    print(categories)
-    return render(request, 'mostruario/index.html', {'form': form, 'items': items, 'categories': categories})
+
+    return render(request, 'mostruario/index.html', {
+        'form': form,
+        'items': items,
+        'categories': categories,
+        'category_filter': category_filter  
+    })
 
 @login_required
 def delete_item(request, item_id):

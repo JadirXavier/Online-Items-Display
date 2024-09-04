@@ -1,14 +1,40 @@
+html {
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    overflow-x: hidden;
+    font-family: 'Exo 2', sans-serif;
+    line-height: 1.6;
+    background-color: #F7EFE5 !important;
+}
+
+
+.container, .row {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .navbar{
     background-color: #E2BFD9 !important;
 }
 
-body {
-    background-color: #F7EFE5 !important;
+.navbar-brand {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 35px;
 }
 
 .card {
     background-color: white !important;
-    
+    min-width: 0; 
 }
 
 
@@ -17,14 +43,12 @@ p, h1, h2, h3, h4, h5, a {
 }
 
 
-.item {
+.item, .add-item {
     margin-bottom: 20px;
     padding: 15px;
     text-align: center;
     border-radius: 10px;
 }
-
-
 
 .image-container img {
     height: 100%;
@@ -32,6 +56,13 @@ p, h1, h2, h3, h4, h5, a {
     max-height: 490px;
 }
 
+.item .card {
+    transition: transform 0.3s ease; 
+}
+
+.item .card:hover {
+    transform: scale(1.05);
+}
 
 #id_photo, #id_description, #id_name, #id_price {
     width: 100%;
@@ -39,4 +70,9 @@ p, h1, h2, h3, h4, h5, a {
 
 .filter-button {
     border-radius: 20px;
+}
+
+.active-filter {
+    background-color: #007bff;
+    color: white;
 }
