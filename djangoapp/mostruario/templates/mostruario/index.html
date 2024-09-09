@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Item List</title>
+  <title>Sissi e Vanessa</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
   <link href="{% static 'mostruario/styles.css' %}" rel="stylesheet" />
@@ -14,45 +14,72 @@
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital@0;1&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/cdac112bd6.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
   {% include './navbar.html' %}
   <div class="container mt-5">
-    <div class="filter-buttons mb-4 d-flex justify-content-center flex-wrap">
-      <a href="?category=all&page={{ items.number }}" class="btn btn-outline-primary filter-button m-2 {% if category_filter == 'all' %}active-filter{% endif %}">
-          <i class="fa-solid fa-house"></i> Todos
-      </a>
-      {% for category in categories %}
-      <a href="?category={{ category.0 }}&page={{ items.number }}" class="btn btn-outline-primary filter-button m-2 {% if category_filter == category.0 %}active-filter{% endif %}">
-          {% if category.0 == 'Artesanato' %}
-          <i class="fa-solid fa-scissors"></i> Artesanato
-          {% elif category.0 == 'Roupas' %}
-          <i class="fa-solid fa-shirt"></i> Roupas
-          {% elif category.0 == 'Bolsas' %}
-          <i class="fa-solid fa-bag-shopping"></i> Bolsas
-          {% endif %}
-      </a>
-      {% endfor %}
-  </div>
-    
-    
-
+    <div class="d-flex flex-column">
+      <div class="filter-buttons mb-4 d-flex justify-content-center flex-wrap">
+        <a href="?category=all&sort={{ sort_order }}&page={{ items.number }}" class="btn btn-outline-primary filter-button m-2 {% if category_filter == 'all' %}active-filter{% endif %}">
+            <i class="fa-solid fa-house"></i> Todos
+        </a>
+        {% for category in categories %}
+        <a href="?category={{ category.0 }}&sort={{ sort_order }}&page={{ items.number }}" class="btn btn-outline-primary filter-button m-2 {% if category_filter == category.0 %}active-filter{% endif %}">
+            {% if category.0 == 'Amigurumi' %}
+            <i class="fa-solid fa-scissors"></i> Amigurumi
+            {% elif category.0 == 'Roupas' %}
+            <i class="fa-solid fa-shirt"></i> Roupas
+            {% elif category.0 == 'Bolsas' %}
+            <i class="fa-solid fa-bag-shopping"></i> Bolsas
+            {% endif %}
+        </a>
+        {% endfor %}
+      </div>
+      <form id="filter" class="d-flex align-self-center mb-4 gap-3">
+        <label for="sort">Ordenar por:</label>
+        <select id="sort" name="sort" onchange="handleFilterChange()">
+            <option value="name_asc" {% if sort_order == 'name_asc' %}selected{% endif %}>a-Z</option>
+            <option value="name_desc" {% if sort_order == 'name_desc' %}selected{% endif %}>Z-a</option>
+            <option value="price_asc" {% if sort_order == 'price_asc' %}selected{% endif %}>Menor preço</option>
+            <option value="price_desc" {% if sort_order == 'price_desc' %}selected{% endif %}>Maior preço</option>
+        </select>
+      </form>
+    </div>
     <!-- Grid -->
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 justify-content-center">
       {% for item in items %}
       <div class="col item" data-category="{{ item.category }}" data-id="{{ item.id }}">
         <div class="card h-100">
-          {% if item.photo %}
-          <img src="{{ item.photo.url }}" class="card-img-top" alt="{{ item.name }}" />
+          {% if item.photos.all %}
+          <div id="carouselItem{{ item.id }}" class="carousel slide"  data-bs-interval="false">
+            <div class="carousel-inner">
+              {% for photo in item.photos.all %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ photo.photo.url }}" class="card-img-top" alt="{{ item.name }}">
+              </div>
+              {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselItem{{ item.id }}" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselItem{{ item.id }}" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+          {% else %}
+          <img src="{% static 'mostruario/imgs/no-image-icon.png' %}" class="card-img-top" alt="No Image">
           {% endif %}
-          <div class="card-body">
+          <div class="center card-body d-flex flex-wrap flex-column align-content-center align-items-center">
             <h5 class="card-title">{{ item.name }}</h5>
             <p class="card-text"><strong>Preço:</strong> R${{ item.price }}</p>
             {% if user.is_authenticated %}
             <!-- Botões -->
-            <div class="button-group">
+            <div class="button-group w-100">
               <button class="btn btn-warning w-100 mb-2" onclick="toggleEditForm('{{ item.id }}')">Editar</button>
               <a href="{% url 'mostruario:delete_item' item.id %}" class="btn btn-danger w-100"
                 onclick="return confirm('Tem certeza que deseja deletar este item?');">Deletar</a>
@@ -63,6 +90,15 @@
               <form method="post" enctype="multipart/form-data" action="{% url 'mostruario:update_item' item.id %}">
                 {% csrf_token %}
                 {{ form.as_p }}
+                {{ formset.management_form }}
+                {% for form in formset.forms %}
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Foto {{ forloop.counter }}</label> 
+                      {{ form.photo }} 
+                    </div>
+                  </div>
+                {% endfor %}
                 <button type="submit" class="btn btn-primary w-100">Salvar</button>
                 <button type="button" class="btn btn-secondary w-100 mt-2"
                   onclick="toggleEditForm('{{ item.id }}')">Cancelar</button>
@@ -75,7 +111,7 @@
       {% endfor %}
 
       {% if user.is_authenticated %}
-      <div class="col-6 col-md-4 col-lg-3 add-item">
+      <div class="col add-item">
         <!-- Botão de adicionar item -->
         <div class="card h-100 text-center" id="add-item-btn">
           <div class="card-body d-flex align-items-center justify-content-center">
@@ -85,10 +121,19 @@
 
         <!-- Formulário de adição de item -->
         <div class="card h-100 d-none" id="add-item-form">
-          <div class="card-body">
+          <div class="center card-body d-flex flex-wrap flex-column align-content-center">
             <form method="post" enctype="multipart/form-data">
               {% csrf_token %}
               {{ form.as_p }}
+              {{ formset.management_form }}
+              {% for form in formset.forms %}
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Foto {{ forloop.counter }}</label> 
+                    {{ form.photo }} 
+                  </div>
+                </div>
+              {% endfor %}
               <button type="submit" class="btn btn-primary w-100">Adicionar item</button>
               <button type="button" class="btn btn-secondary w-100 mt-2" onclick="cancelAddItem()">Cancelar</button>
             </form>
@@ -98,44 +143,58 @@
       {% endif %}
     </div>
     <!-- Paginação -->
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center mt-4">
-        {% if items.has_previous %}
-        <li class="page-item">
-          <a class="page-link"
-            href="?page={{ items.previous_page_number }}{% if category_filter != 'all' %}&category={{ category_filter }}{% endif %}"
-            aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center mt-4">
+      {% if items.has_previous %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ items.previous_page_number }}&category={{ category_filter }}&sort={{ sort_order }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
           </a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-          <span class="page-link">&laquo;</span>
-        </li>
-        {% endif %}
+      </li>
+      {% endif %}
 
-        {% for num in items.paginator.page_range %}
-        
+<!-- Primeira página sempre visível -->
+{% if items.paginator.num_pages > 1 %}
+<li class="page-item {% if items.number == 1 %}active{% endif %}">
+    <a class="page-link" href="?page=1&category={{ category_filter }}&sort={{ sort_order }}">1</a>
+</li>
+{% endif %}
+
+<!-- Páginas intermediárias -->
+{% if items.number|add:'-4' > 1 %}
+<li class="page-item disabled"><span class="page-link">...</span></li>
+{% endif %}
+
+{% for num in items.paginator.page_range %}
+{% if num > 1 and num < items.paginator.num_pages %}
+    {% if num >= items.number|add:'-2' and num <= items.number|add:'2' %}
         <li class="page-item {% if items.number == num %}active{% endif %}">
-          <a class="page-link" href="?page={{ num }}{% if category_filter != 'all' %}&category={{ category_filter }}{% endif %}"> {{ num }} </a>
+            <a class="page-link" href="?page={{ num }}&category={{ category_filter }}&sort={{ sort_order }}">{{ num }}</a>
         </li>
-        {% endfor %}
+    {% endif %}
+{% endif %}
+{% endfor %}
 
-        {% if items.has_next %}
-        <li class="page-item">
-          <a class="page-link"
-            href="?page={{ items.next_page_number }}{% if category_filter != 'all' %}&category={{ category_filter }}{% endif %}"
-            aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
+<!-- Última página sempre visível -->
+{% if items.number|add:'3' < items.paginator.num_pages %}
+<li class="page-item disabled"><span class="page-link">...</span></li>
+{% endif %}
+
+{% if items.paginator.num_pages > 1 %}
+<li class="page-item {% if items.number == items.paginator.num_pages %}active{% endif %}">
+    <a class="page-link" href="?page={{ items.paginator.num_pages }}&category={{ category_filter }}&sort={{ sort_order }}">{{ items.paginator.num_pages }}</a>
+</li>
+{% endif %}
+
+      {% if items.has_next %}
+      <li class="page-item">
+          <a class="page-link" href="?page={{ items.next_page_number }}&category={{ category_filter }}&sort={{ sort_order }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
           </a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-          <span class="page-link">&raquo;</span>
-        </li>
-        {% endif %}
-      </ul>
-    </nav>
+      </li>
+      {% endif %}
+  </ul>
+</nav>
   </div>
 
   <script>
@@ -172,28 +231,34 @@
     function filterItems(category) {
       console.log('Filtrando por categoria:', category);
 
-      let items = document.querySelectorAll('.item'); // Seleciona todos os itens
-      let buttons = document.querySelectorAll('.filter-button'); // Seleciona todos os botões de filtro
+      let items = document.querySelectorAll('.item'); 
+      let buttons = document.querySelectorAll('.filter-button'); 
 
-      // Itera sobre os itens e ajusta sua visibilidade
       items.forEach(function (item) {
-        let itemCategory = item.getAttribute('data-category'); // Obtém a categoria do item
+        let itemCategory = item.getAttribute('data-category'); 
 
         if (category === 'all' || itemCategory === category) {
-          item.style.display = 'block'; // Exibe o item se ele pertence à categoria selecionada ou se "all" foi selecionado
-        } else {
-          item.style.display = 'none'; // Esconde o item se ele não pertence à categoria selecionada
+          item.style.display = 'block'; 
+          item.style.display = 'none'; 
         }
       });
 
-      // Itera sobre os botões e remove a classe ativa
       buttons.forEach(function (button) {
         button.classList.remove('active-filter');
       });
 
-      // Adiciona a classe ativa ao botão clicado
       document.querySelector(`button[onclick="filterItems('${category}')"]`).classList.add('active-filter');
     }
+    
+    function handleFilterChange() {
+    const category = new URLSearchParams(window.location.search).get('category') || 'all';
+
+    const sort = document.getElementById('sort').value;
+
+    const url = `?category=${category}&sort=${sort}`;
+
+    window.location.href = url;
+}
   </script>
 </body>
 
