@@ -159,10 +159,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 'https://localhost:8000',
 
 CORS_ORIGIN_WHITELIST = [
-    'https://site-roupas.onrender.com/',
-    'https://www.site-roupas.onrender.com/'
+    'https://site-roupas.onrender.com',
+    'https://www.site-roupas.onrender.com'
 ]
+
 CSRF_TRUSTED_ORIGINS = [
-    'https://site-roupas.onrender.com/',
-    'https://www.site-roupas.onrender.com/'
+    'https://site-roupas.onrender.com',
+    'https://www.site-roupas.onrender.com'
 ]
