@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 class Item(models.Model):
     CATEGORIES = [
@@ -18,7 +19,7 @@ class Item(models.Model):
 
 class ItemPhoto(models.Model):
     item = models.ForeignKey(Item, related_name='photos', on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to='items/', verbose_name="Foto")
+    photo = CloudinaryField(verbose_name="Foto")
 
     def __str__(self):
         return f"Photo for {self.item.name}"
