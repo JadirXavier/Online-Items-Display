@@ -105,8 +105,12 @@ WSGI_APPLICATION = 'djangoapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv('DB_ENGINE'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -159,11 +163,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 'https://localhost:8000',
 
 CORS_ORIGIN_WHITELIST = [
+    'https://localhost:8000',
     'https://site-roupas.onrender.com',
     'https://www.site-roupas.onrender.com'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://localhost:8000',
     'https://site-roupas.onrender.com',
     'https://www.site-roupas.onrender.com'
 ]
