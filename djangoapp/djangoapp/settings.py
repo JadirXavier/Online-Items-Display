@@ -155,8 +155,10 @@ SATATICFILES_STORAGE = "whitenoise.storage.Compress.ManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_WHITELIST = [
-    'https://localhost:8000'
+    'https://localhost:8000',
+    'https://site-roupas.onrender.com/'
 ]
 CSRF_TRUSTED_ORIGINS = [
-    'https://localhost:8000'
+    'https://localhost:8000',
+    'https://site-roupas.onrender.com/'
 ]
