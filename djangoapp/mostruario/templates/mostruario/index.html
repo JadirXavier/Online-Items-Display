@@ -29,7 +29,7 @@
         {% for category in categories %}
         <a href="?category={{ category.0 }}&sort={{ sort_order }}&page={{ items.number }}" class="btn btn-outline-primary filter-button m-2 {% if category_filter == category.0 %}active-filter{% endif %}">
             {% if category.0 == 'Amigurumi' %}
-            <i class="fa-solid fa-scissors"></i> Amigurumi
+            <i class="fa-solid fa-scissors"></i> Amigurumis
             {% elif category.0 == 'Roupas' %}
             <i class="fa-solid fa-shirt"></i> Roupas
             {% elif category.0 == 'Bolsas' %}
