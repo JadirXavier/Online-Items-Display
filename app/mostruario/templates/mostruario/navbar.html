@@ -1,14 +1,14 @@
 <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Sissi e Vanessa</a>
+    <a class="navbar-brand" href="#">Items Display</a>
     {% if user.is_authenticated %}
       <div class="d-flex gap-3">
         <a class="nav-link align-self-center"><strong>{{ user.username }}</strong></a>
         <form method="post" action="{% url 'mostruario:logout_view' %}">
           {% csrf_token %}
-          <input type="submit" value="Logout" style="background: none; border: none; font-weight: bold; cursor: pointer;">
+          <input type="submit" value="Logout" style="background: none; border: none; font-weight: bold; cursor: pointer;" />
         </form>
       </div>
     {% endif %}
- </div>
+  </div>
 </nav>
